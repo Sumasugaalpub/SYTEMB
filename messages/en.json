@@ -1,0 +1,11 @@
+{
+  "app": { "name": "Somalia Peace Museum", "tagline": "National Peace & Reconciliation Monitoring", "search": "Search or jump to...", "skip": "Skip to content", "collapse": "Collapse sidebar", "expand": "Expand sidebar", "menu": "Menu", "signOut": "Sign out" },
+  "groups": { "overview": "Overview", "framework": "Framework", "conflict": "Conflict & Security", "data": "Data & Analytics", "knowledge": "Evidence & Knowledge", "admin": "Administration", "state-overview": "State Overview", "state-inbox": "Submissions", "state-governance": "Data Governance" },
+  "nav": {
+    "executive": "Dashboard", "welcome": "Welcome & Orientation", "brief": "Executive Overview", "framework": "Framework", "result-areas": "Result Areas", "interventions": "Interventions", "indicators": "Indicators", "national-indicators": "National Indicators", "conflict-navigator": "Conflict Navigator", "early-warning": "Early Warning", "early-response": "Early Response", "conflict-intelligence": "Conflict Intelligence", "map": "National Map", "data-explorer": "Data Explorer", "analytics": "Analytics", "evidence": "Evidence Library", "knowledge": "Knowledge Hub", "reports": "Reports", "verify": "QR Verification", "users": "Users & Roles", "settings": "Settings", "audit-log": "Audit Log", "support": "Support",
+    "state": "State Dashboard", "submissions": "Submissions Inbox", "sharing": "Sharing Control", "access-log": "Access Log", "state-map": "State Map"
+  },
+  "filters": { "region": "Region", "period": "Period", "all": "All Somalia" },
+  "common": { "export": "Export", "qr": "Share QR", "notifications": "Notifications", "role": "Role", "language": "Language", "englishOnly": "English only", "seeAll": "See all", "restricted": "Restricted", "noData": "No data received", "suppressed": "Fewer than {n}", "status": "System status", "online": "All systems operational", "lastSync": "Last sync", "footer": "Federal Government of Somalia · Somalia Peace Museum · Demo data only" },
+  "district": { "signIn": "Sign in", "home": "Home", "newReport": "New district report", "eventReport": "Report an event", "next": "Next", "back": "Back", "submit": "Submit report", "offline": "You are offline — your report is saved on this phone", "audio": "Listen" }
+}

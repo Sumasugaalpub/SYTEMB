@@ -1,0 +1,470 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Brand design tokens — generate bg-brand/text-success/border-danger/etc.
+   Values match the handoff: blue 600/500/50, success/warning/danger. */
+@theme {
+  --color-brand: #92c2f0;
+  --color-brand-hover: #74b0e8;
+  --color-brand-tint: #f1f8fe;
+  --color-success: #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-foreground: #ffffff;
+  --color-danger: #dc2626;
+  --color-danger-foreground: #ffffff;
+  --color-violet: #9333ea;
+}
+
+/* Dashboard shell palette — same values the inv-* skin defines, kept as plain
+   custom properties (like --background/--sidebar below) so utilities can read
+   them via text-[var(--inv-value)] and the .dark block flips them. */
+:root {
+  --inv-app: #ffffff;
+  --inv-card: #ffffff;
+  --inv-card-border: #e6e8ee;
+  --inv-line: #eef0f3;
+  --inv-title: #5a6474;
+  --inv-value: #171a20;
+  --inv-muted: #828b9b;
+  --inv-muted2: #aab0bd;
+  --inv-icon: #98a0af;
+  --inv-green: #159a52;
+  --inv-red: #d94a4a;
+  --inv-amber: #d98a06;
+  --inv-blue: #2f77e6;
+  --inv-violet: #7a6cf0;
+  --inv-teal: #0d9a8c;
+  --inv-dark: #242b39;
+  --inv-brand: #7cb2ea;
+  --inv-brand-hover: #74b0e8;
+  --inv-brand-active: #5099dc;
+  --inv-brand-soft: #f1f8fe;
+  --inv-brand-bd: #cde5f9;
+  --inv-brand-dark: #1f4263;
+  /* #92c2f0 is only 1.95:1 on white, so text/icons use this deeper tint of the
+     same hue (212deg) instead — 10.6:1 on white, 5.4:1 on the brand fill. */
+  --inv-brand-ink: #1f4263;
+  /* Foreground for text/icons ON a brand fill. The fill is light in both
+     themes, so this stays dark in both — it does not flip like -ink. */
+  --inv-brand-on: #ffffff;
+  --inv-hatch: repeating-linear-gradient(45deg, rgba(23, 26, 32, .03) 0 1px, transparent 1px 7px);
+}
+
+html.dark {
+  --inv-app: #0a0b0d;
+  --inv-card: #111214;
+  --inv-card-border: rgba(255, 255, 255, .07);
+  --inv-line: rgba(255, 255, 255, .055);
+  --inv-title: #a3a8b2;
+  --inv-value: #dde0e6;
+  --inv-muted: #9aa0ac;
+  --inv-muted2: #6b7078;
+  --inv-icon: #767c86;
+  --inv-dark: #1c1e24;
+  --inv-brand: #6aa6e3;
+  --inv-brand-hover: #a3cdf3;
+  --inv-brand-soft: rgba(146, 194, 240, .15);
+  --inv-brand-bd: rgba(146, 194, 240, .38);
+  /* Flips light on dark — the ink token always means "readable brand text". */
+  --inv-brand-ink: #a3cdf3;
+  --inv-hatch: repeating-linear-gradient(45deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 7px);
+}
+
+/* Chart palette — every chart, sparkbar, composition bar reads from here.
+   Update once, the whole app changes. */
+:root {
+  --chart-blue: #2563eb;
+  --chart-blue-soft: #bfdbfe;
+  --chart-green: #16a34a;
+  --chart-green-soft: #bbf7d0;
+  --chart-amber: #d97706;
+  --chart-amber-soft: #fde68a;
+  --chart-violet: #9333ea;
+  --chart-violet-soft: #ddd6fe;
+  --chart-red: #dc2626;
+  --chart-red-soft: #fecaca;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Brand blue (#A2BCDA) */
+  --primary: #7cb2ea;
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  /* Focus ring uses the deeper brand tint so it stays visible on white */
+  --ring: #5099dc;
+  /* Brand palette: blue, green, amber, violet, red */
+  --chart-1: oklch(0.546 0.245 262.881);
+  --chart-2: oklch(0.627 0.194 149.214);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.606 0.25 292.717);
+  --chart-5: oklch(0.637 0.237 25.331);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #6aa6e3;
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    letter-spacing: 0;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+  /* Iconify web component — sizes from font-size, so it needs the inline-block
+     box the design reference relies on. */
+  iconify-icon {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+  }
+  /* Single full-screen fade for browsers without the View Transitions API.
+     One overlay, one timer — deliberately NOT a per-element colour transition,
+     which is what made the flip ripple through the shell card by card. */
+  html.theme-fade::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    pointer-events: none;
+    background: var(--inv-app);
+    animation: theme-fade 0.12s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes theme-fade {
+    from {
+      opacity: 0.65;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.theme-fade::after {
+      display: none;
+    }
+  }
+}
+
+/* Theme flip cross-fade — the browser snapshots the whole page and eases the
+   old frame into the new one in a single pass, so light and dark swap all at
+   once. Lives outside @layer base: ::view-transition-* are root pseudo-
+   elements, not part of the cascade layers. No per-element
+   view-transition-name anywhere — the default root cross-fade is the point. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.12s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* ============================================================================
+   PMS dashboard design tokens — ported 1:1 from the PROHAPA staging dashboard.
+   Light values live on :root, dark values on html.dark (SPM flips the html el).
+   ========================================================================= */
+:root {
+  --pms-canvas: #f8f9fa;
+  --pms-surface: #fefefe;
+  --pms-surface-muted: #f4f4f5;
+  --pms-text-strong: #111827;
+  --pms-text: #111827;
+  --pms-shell-card-border: transparent;
+  --pms-hairline-border: #e5e7eb;
+  --pms-border-card: #e5e7eb;
+  --pms-border-subtle: rgba(0, 0, 0, 0.08);
+  --pms-cta-bg: #171717;
+  --pms-cta-hover: #262626;
+  --pms-cta-fg: #ffffff;
+  --pms-search-bg: #f3f4f6;
+  --pms-search-border: #e5e7eb;
+  --pms-icon-button-bg: #ffffff;
+  --pms-icon-button-border: #e5e7eb;
+  --pms-icon-button-fg: #52525b;
+  --pms-badge-ring: #ffffff;
+  --pms-stat-bar-bg: #fefefe;
+  --pms-stat-bar-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.08);
+  --pms-stat-divider: rgba(0, 0, 0, 0.08);
+  --pms-stat-value: #111827;
+  --pms-sidebar-icon-hover-bg: #f5f5f5;
+  --pms-chart-legend: #737373;
+  --pms-chart-axis: #737373;
+  --pms-chart-grid: #e8ebe9;
+  --pms-chart-placeholder: rgba(245, 245, 245, 0.8);
+  --pms-bar-pending: #e1e1e1;
+  --pms-tooltip-bg: #ffffff;
+  --pms-tooltip-border: #e5e7eb;
+  --pms-tooltip-text: #171717;
+  --pms-tooltip-muted: #737373;
+  --pms-segmented-track: #f3f4f6;
+  --pms-segmented-thumb: #ffffff;
+  --pms-cost-mini-bg: #ffffff;
+  --pms-cost-chart-well-bg: #fafafb;
+  --pms-thumb-bg: #f5f5f5;
+  --pms-stat-trend-good: #059669;
+  --pms-stat-trend-bad: #dc2626;
+  --pms-pill-success-bg: #eaf2fb;
+  --pms-pill-success-fg: #1f4263;
+  --pms-pill-success-icon-bg: rgba(31, 66, 99, 0.16);
+  --pms-divide: #f3f4f6;
+  --pms-row-hover: #fafafa;
+  --pms-badge-active-bg: #e4eefb;
+  --pms-badge-active-fg: #1f4263;
+  --pms-primary: #1f4263;
+  --pms-primary-hover: #1f4263;
+  --pms-success: #159a52;
+  --pms-danger: #d94a4a;
+  --pms-muted-text: #6b7280;
+  --pms-card-shadow: 0 1px 3px rgb(0 0 0 / 0.06), 0 2px 8px rgb(0 0 0 / 0.06);
+  --pms-radius-card: 12px;
+  --pms-radius-control: 10px;
+  /* Chart tones — neutral-blue ramp, never red/green for state identity. */
+  --pms-chart-collected: #5099dc;
+  --pms-chart-collected-strong: #1f4263;
+  --pms-cost-maintenance: #4f7ea8;
+  --pms-cost-maintenance-soft: #eef5fb;
+  --pms-cost-repair: #c5a06f;
+  --pms-cost-repair-soft: #fcf8ef;
+  --pms-cost-taxes: #89a6c8;
+  --pms-cost-taxes-soft: #eff5fb;
+  --pms-cost-saving: #8f84bc;
+  --pms-cost-saving-soft: #f5f2fb;
+  /* Icon chips */
+  --pms-icon-neutral-bg: #eef2f7;
+  --pms-icon-neutral-fg: #64748b;
+  --pms-icon-success-bg: #eaf4ee;
+  --pms-icon-success-fg: #3f8560;
+  --pms-icon-info-bg: #eff5fb;
+  --pms-icon-info-fg: #4f7ea8;
+  --pms-icon-accent-bg: #f5f2fb;
+  --pms-icon-accent-fg: #7c6fb0;
+  --pms-icon-warning-bg: #fcf8ef;
+  --pms-icon-warning-fg: #b58a45;
+  --pms-icon-danger-bg: #fdf3f3;
+  --pms-icon-danger-fg: #b96b6b;
+}
+
+html.dark {
+  --pms-canvas: #0a0b0d;
+  --pms-surface: #131418;
+  --pms-surface-muted: #101115;
+  --pms-text-strong: #ebebef;
+  --pms-text: #e2e2e7;
+  --pms-shell-card-border: rgba(255, 255, 255, 0.08);
+  --pms-hairline-border: rgba(255, 255, 255, 0.08);
+  --pms-border-card: rgba(255, 255, 255, 0.08);
+  --pms-border-subtle: rgba(255, 255, 255, 0.06);
+  --pms-cta-bg: #1f4263;
+  --pms-cta-hover: #2a5580;
+  --pms-cta-fg: #ffffff;
+  --pms-search-bg: #101115;
+  --pms-search-border: rgba(255, 255, 255, 0.1);
+  --pms-icon-button-bg: #131418;
+  --pms-icon-button-border: rgba(255, 255, 255, 0.1);
+  --pms-icon-button-fg: #b2b7c0;
+  --pms-badge-ring: #131418;
+  --pms-stat-bar-bg: #131418;
+  --pms-stat-bar-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --pms-stat-divider: rgba(255, 255, 255, 0.08);
+  --pms-stat-value: #ebebef;
+  --pms-sidebar-icon-hover-bg: rgba(255, 255, 255, 0.06);
+  --pms-chart-legend: #8f969f;
+  --pms-chart-axis: #8f969f;
+  --pms-chart-grid: rgba(255, 255, 255, 0.06);
+  --pms-chart-placeholder: rgba(19, 20, 24, 0.9);
+  --pms-bar-pending: #353840;
+  --pms-tooltip-bg: #101115;
+  --pms-tooltip-border: rgba(255, 255, 255, 0.12);
+  --pms-tooltip-text: #e2e2e7;
+  --pms-tooltip-muted: #a0a0a0;
+  --pms-segmented-track: rgba(255, 255, 255, 0.06);
+  --pms-segmented-thumb: #3a3a3a;
+  --pms-cost-mini-bg: #17181d;
+  --pms-cost-chart-well-bg: #101115;
+  --pms-thumb-bg: #22242a;
+  --pms-stat-trend-good: #a0a0a0;
+  --pms-stat-trend-bad: #a0a0a0;
+  --pms-pill-success-bg: rgba(255, 255, 255, 0.06);
+  --pms-pill-success-fg: #a0a0a0;
+  --pms-pill-success-icon-bg: rgba(255, 255, 255, 0.08);
+  --pms-divide: rgba(255, 255, 255, 0.08);
+  --pms-row-hover: rgba(255, 255, 255, 0.06);
+  --pms-badge-active-bg: rgba(80, 153, 220, 0.18);
+  --pms-badge-active-fg: #a8cbec;
+  --pms-primary: #5099dc;
+  --pms-primary-hover: #74b0e8;
+  --pms-success: #34d399;
+  --pms-danger: #e63946;
+  --pms-muted-text: #a0a0a0;
+  --pms-card-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --pms-chart-collected: #4b7ba5;
+  --pms-chart-collected-strong: #6fa3ce;
+  --pms-cost-maintenance: #8c9baa;
+  --pms-cost-maintenance-soft: rgba(140, 155, 170, 0.14);
+  --pms-cost-repair: #a3927d;
+  --pms-cost-repair-soft: rgba(163, 146, 125, 0.14);
+  --pms-cost-taxes: #8398ad;
+  --pms-cost-taxes-soft: rgba(131, 152, 173, 0.14);
+  --pms-cost-saving: #8f8aa6;
+  --pms-cost-saving-soft: rgba(143, 138, 166, 0.14);
+  --pms-icon-neutral-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-neutral-fg: #a0a0a0;
+  --pms-icon-success-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-success-fg: #a0a0a0;
+  --pms-icon-info-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-info-fg: #a0a0a0;
+  --pms-icon-accent-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-accent-fg: #a0a0a0;
+  --pms-icon-warning-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-warning-fg: #a0a0a0;
+  --pms-icon-danger-bg: rgba(255, 255, 255, 0.06);
+  --pms-icon-danger-fg: #a0a0a0;
+}
+
+/* ---------------------------------------------------------------------------
+   Print — A4 portrait. Used by the executive brief and every other Print
+   button: black on white, shell chrome dropped, content across the full page.
+--------------------------------------------------------------------------- */
+@page {
+  size: A4 portrait;
+  margin: 16mm;
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  /* Rail, side panel and the sticky top bar are controls, not paper. */
+  aside,
+  #main-content > .sticky {
+    display: none !important;
+  }
+
+  /* The brief runs the full width of the sheet. */
+  #main-content {
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  #main-content > div {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}
