@@ -4,13 +4,14 @@ National peace & reconciliation monitoring mockup. Design system (double sidebar
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000 → /executive
+npm run dev      # http://localhost:3000 → portal sign-in
 ```
 
 ## Portals
 - **Executive** (`app/(executive)`) — 20 pages, icon rail + contextual panel
 - **State** (`app/(state)/state`) — 7 pages, South West
-- **District** (`app/(district)/district`) — phone app, 9 screens + event report
+- **District** (`app/(district)/district`) — phone app, 9 screens + event report (first version)
+- **Mobile** (`app/mobile`, opens at `/mobile`) — Portal 4 district field app, rebuilt: sign-in, home, six report steps, review, receipt, event report, outbox, history. English by default with a Somali switch, light/dark theme, works offline (outbox + auto-send). Demo sign-in: `+252 61 555 0142`, any 4-digit PIN.
 
 ## Rules
 - All dates come from `data/timeline.ts`.

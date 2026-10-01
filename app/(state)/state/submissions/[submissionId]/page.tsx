@@ -20,6 +20,8 @@ import {
   Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { EmptyState, IconChip, PageHeader, Pill, type PillTone, PmsCard, printPage, useExportDialog } from "@/components/pms/ui";
+import type { MobileSubmission } from "@/components/mobile/actions";
+import { CAUSES, REASONS, TRENDS } from "@/components/mobile/state";
 
 const TONE: Record<SubStatus, PillTone> = { approved: "good", pending: "warn", returned: "bad", draft: "neutral", missing: "accent" };
 const REVIEWER = "Sahra Aadan";
@@ -35,6 +37,9 @@ export default function ReviewSubmission() {
   if (!row) return <EmptyState icon="solar:file-corrupted-linear" title="That return no longer exists" />;
 
   const status = row.status as SubStatus;
+  // Returns filed from the district app carry every answer, not just the totals.
+  const answers = (row as MobileSubmission).answers;
+  const en = <T,>(list: { value: T; en: string }[], v: T | null) => list.find((o) => o.value === v)?.en ?? "—";
   const region = REGIONS.find((r) => r.id === row.region)?.name ?? row.region;
   const approvable = rules.canApprove(row);
   const flag = row.resolved > row.disputes
@@ -70,7 +75,7 @@ export default function ReviewSubmission() {
               {[
                 { label: "Disputes", value: row.disputes, icon: "solar:scale-linear" },
                 { label: "Resolved", value: row.resolved, icon: "solar:check-circle-linear" },
-                { label: "Tension level", value: row.tension, icon: "solar:danger-triangle-linear" },
+                { label: answers ? "Tension trend" : "Tension level", value: answers ? en(TRENDS, answers.tension.trend) : row.tension, icon: "solar:danger-triangle-linear" },
                 { label: "Evidence files", value: row.evidence, icon: "solar:gallery-wide-linear" },
               ].map((s) => (
                 <div key={s.label} className="border-b border-r border-[color:var(--pms-divide)] px-5 py-4 last:border-r-0">
@@ -86,14 +91,40 @@ export default function ReviewSubmission() {
             </div>
           </PmsCard>
 
+          {answers ? (
+            <PmsCard title="From the district app">
+              <dl className="grid grid-cols-1 gap-3 text-[13px] sm:grid-cols-2">
+                {[
+                  ["Peace committee", answers.committee.met ? `Met · ${answers.committee.meetings} meetings` : "Did not meet"],
+                  ["Main dispute cause", en(CAUSES, answers.disputes.cause)],
+                  ["Local council", answers.council.formed ? `Formed ${answers.council.year ?? ""} · ${answers.council.members} members, ${answers.council.women} women` : "Not formed"],
+                  ["Main reason for tension", en(REASONS, answers.tension.reason)],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <dt className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--pms-muted-text)]">{k}</dt>
+                    <dd className="mt-1 leading-[1.5] text-[var(--pms-text)]">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </PmsCard>
+          ) : null}
+
           <PmsCard title="The story">
             <dl className="flex flex-col gap-3 text-[13px]">
-              {[
-                ["What happened", BERDAALE_REPORT.narrative.whatHappened],
-                ["What stopped more being done", BERDAALE_REPORT.narrative.whoActed],
-                ["What will change next quarter", BERDAALE_REPORT.narrative.whatChanged],
-                ["What changed for ordinary people", BERDAALE_REPORT.narrative.whatIsNeeded],
-              ].map(([k, v]) => (
+              {(answers
+                ? [
+                    ["What happened", answers.narrative.narrative],
+                    ["What stopped more being done", answers.narrative.bottleneck || "—"],
+                    ["What will change next quarter", answers.narrative.corrective || "—"],
+                    ["What changed for ordinary people", answers.narrative.citizen || "—"],
+                  ]
+                : [
+                    ["What happened", BERDAALE_REPORT.narrative.whatHappened],
+                    ["What stopped more being done", BERDAALE_REPORT.narrative.whoActed],
+                    ["What will change next quarter", BERDAALE_REPORT.narrative.whatChanged],
+                    ["What changed for ordinary people", BERDAALE_REPORT.narrative.whatIsNeeded],
+                  ]
+              ).map(([k, v]) => (
                 <div key={k}>
                   <dt className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--pms-muted-text)]">{k}</dt>
                   <dd className="mt-1 leading-[1.5] text-[var(--pms-text)]">{v}</dd>

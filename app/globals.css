@@ -468,3 +468,53 @@ html.dark {
     padding: 0 !important;
   }
 }
+
+/* ============================================================================
+   District field app (app/mobile) — the website's palette as light and dark
+   tokens, scoped to the phone frame. html.dark flips them with the site.
+   ========================================================================= */
+.m-app {
+  --m-page: #e3e7ed;
+  --m-bg: #f3f4f6;
+  --m-card: #ffffff;
+  --m-text: #171a20;
+  --m-muted: #5a6474;
+  --m-faint: #98a0af;
+  --m-ink: #1f4263;
+  --m-active: #5099dc;
+  --m-soft: #f1f8fe;
+  --m-line: #e6e8ee;
+  --m-field: #f3f4f6;
+  --m-cta: #171a20;
+  --m-cta-text: #ffffff;
+  --m-radio: #b9c1cd;
+  --m-amber-bg: #fdf3e1;
+  --m-amber: #8a5200;
+  --m-red-bg: #fdecec;
+  --m-red: #b93a3a;
+  --m-green-bg: #e3f3ea;
+  --m-green: #23683f;
+}
+
+html.dark .m-app {
+  --m-page: #050608;
+  --m-bg: #0a0b0d;
+  --m-card: #15171b;
+  --m-text: #e6e8ec;
+  --m-muted: #9aa0ac;
+  --m-faint: #6b7078;
+  --m-ink: #a3cdf3;
+  --m-active: #6aa6e3;
+  --m-soft: rgba(146, 194, 240, 0.14);
+  --m-line: rgba(255, 255, 255, 0.08);
+  --m-field: #1f2228;
+  --m-cta: #6aa6e3;
+  --m-cta-text: #0b1520;
+  --m-radio: #4a505b;
+  --m-amber-bg: rgba(217, 138, 6, 0.16);
+  --m-amber: #f0b45a;
+  --m-red-bg: rgba(217, 74, 74, 0.18);
+  --m-red: #f08a8a;
+  --m-green-bg: rgba(21, 154, 82, 0.18);
+  --m-green: #6fd39b;
+}
