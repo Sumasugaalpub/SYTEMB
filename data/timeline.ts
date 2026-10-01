@@ -3,6 +3,8 @@ export const TIMELINE = {
   today: "2026-05-20T09:00",
   period: "2026-Q1",
   periodOpen: "2026-Q2",
+  /** Deadline for the open quarter's district return. */
+  periodOpenDue: "2026-07-15",
   mediation: "2026-04-08",
   filledOffline: "2026-04-12T09:15",
   submitted: "2026-04-14T09:10",
